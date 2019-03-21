@@ -3,18 +3,18 @@ import os
 import time
 import datetime
 import threading
-# import tkinter #python3.5时
-import Tkinter #python2.7时
+import tkinter #python3.5时
+# import Tkinter #python2.7时
 import shutil
 import schedule
-# import tkinter.messagebox #python3.5时
-import tkMessageBox #python2.7时
+import tkinter.messagebox #python3.5时
+# import tkMessageBox #python2.7时
 import cv2
 import re
-# import tkinter.filedialog #python3.5时
-import tkFileDialog #python2.7时
-# from pygame import mixer #python3.5时
-import mp3play #python2.7版本使用mp3play好用,但是python3.5时,使用mp3play时出错,为了保证python3.5能正常播放mp3,则python3.5时使用pygame模块的mixer
+import tkinter.filedialog #python3.5时
+# import tkFileDialog #python2.7时
+from pygame import mixer #python3.5时
+# import mp3play #python2.7版本使用mp3play好用,但是python3.5时,使用mp3play时出错,为了保证python3.5能正常播放mp3,则python3.5时使用pygame模块的mixer
 
 # import win32com
 
@@ -45,7 +45,7 @@ class mythread_vedio(threading.Thread):
     def run(self):
         vedio_capture()
 
-root = Tkinter.Tk()
+root = tkinter.Tk()
 root.title('監視空棚システム')
 root.geometry('420x250+400+200')
 root.resizable(False, False)
@@ -158,14 +158,14 @@ def check_null_dir(dirr): #扫描文件夹
         if  os.listdir(dirr):
             if dirr.count('\\')==3:
                 filename = 'C:\\message.mp3'
-                mp3 = mp3play.load(filename) #python2.7时使用mp3play
-                mp3.play()
-                len = mp3.seconds()
-                time.sleep(len)
-                mp3.stop()
-                # mixer.init()  # python3.5时使用mixer
-                # mixer.music.load(filename)
-                # mixer.music.play()
+                # mp3 = mp3play.load(filename) #python2.7时使用mp3play
+                # mp3.play()
+                # len = mp3.seconds()
+                # time.sleep(len)
+                # mp3.stop()
+                mixer.init()  # python3.5时使用mixer
+                mixer.music.load(filename)
+                mixer.music.play()
                 pic_path = dirr
                 if root.stop == False:
                     lbl['text'] = '経路' + pic_path + '\n棚欠品、確認して!'
@@ -230,7 +230,7 @@ def btn_stopCkeck_Click():
 
 def get_file():
     today_path = time.strftime('%Y-%m-%d')
-    filename = tkFileDialog.askopenfilename(title="ビデオを選択",filetypes = [('ビデオ', 'MPEG'),('ビデオ', 'AVI'),('ビデオ', 'FLV'),('ビデオ', 'RMVB'),('ビデオ', 'MP4')])
+    filename = tkinter.filedialog.askopenfilename(title="ビデオを選択",filetypes = [('ビデオ', 'MPEG'),('ビデオ', 'AVI'),('ビデオ', 'FLV'),('ビデオ', 'RMVB'),('ビデオ', 'MP4')])
     CN_Pattern = re.compile(u'[\u4E00-\u9FBF]+')
     JP_Pattern = re.compile(u'[\u3040-\u31fe]+')
     if filename:
@@ -288,26 +288,26 @@ def get_file():
 # btn_stopCheck['state'] = 'disabled'
 # btn_stopCheck.place(x=310, y=10, width=80, height=20)
 
-lbl = Tkinter.Label(root, text='',font = ("Arial, 10"))
+lbl = tkinter.Label(root, text='',font = ("Arial, 10"))
 lbl.place(x=40, y=120, width=350, height=50)
 
 #
-realTimeSet = Tkinter.LabelFrame(root, text='リアル監視')
-btn_openVideo=Tkinter.Button(realTimeSet, text='カメラ開ける',command=openVideo)
+realTimeSet = tkinter.LabelFrame(root, text='リアル監視')
+btn_openVideo=tkinter.Button(realTimeSet, text='カメラ開ける',command=openVideo)
 btn_openVideo.grid(row=0, column=0, padx=2, pady=2)
-btn_closeVideo = Tkinter.Button(realTimeSet, text='カメラ消す',command=close_video)
+btn_closeVideo = tkinter.Button(realTimeSet, text='カメラ消す',command=close_video)
 btn_closeVideo.grid(row=0, column=1, padx=2, pady=2)
 realTimeSet.grid(row=0, column=0, padx=(10), pady=(5),ipadx=(5), ipady=(5))
 
-uploadVedioSet = Tkinter.LabelFrame(root,text='ビデオ監視')
-btn_uploadVedio=Tkinter.Button(uploadVedioSet, text='ビデオアップロード',command=get_file)
+uploadVedioSet = tkinter.LabelFrame(root,text='ビデオ監視')
+btn_uploadVedio=tkinter.Button(uploadVedioSet, text='ビデオアップロード',command=get_file)
 btn_uploadVedio.grid(row=0, column=0, padx=2, pady=2)
 uploadVedioSet.grid(row=0, column=1, padx=(10), pady=(5),ipadx=(3), ipady=(5))
 
-monitorSet = Tkinter.LabelFrame(root, text='モニタリング')
-btn_startCheck = Tkinter.Button(monitorSet, text='スタート',command=btn_startCheck_Click)
+monitorSet = tkinter.LabelFrame(root, text='モニタリング')
+btn_startCheck = tkinter.Button(monitorSet, text='スタート',command=btn_startCheck_Click)
 btn_startCheck.grid(row=0, column=0, padx=2, pady=2)
-btn_stopCheck = Tkinter.Button(monitorSet,text='ストップ',command=btn_stopCkeck_Click)
+btn_stopCheck = tkinter.Button(monitorSet,text='ストップ',command=btn_stopCkeck_Click)
 btn_stopCheck['state'] = 'disabled'
 btn_stopCheck.grid(row=0, column=1, padx=2, pady=2)
 monitorSet.grid(row=0, column=2, padx=(10), pady=(5),ipadx=(5), ipady=(5))
